@@ -185,7 +185,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .hp-add:active{opacity:.6;}
 
 /* SESSION MANAGER */
-.sm-wrap{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px;}
+.sm-wrap{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:visible;margin-bottom:18px;}
 .sm-form{padding:14px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid var(--border);}
 .sm-form-row{display:flex;flex-direction:column;gap:6px;}
 .sm-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;}
@@ -211,7 +211,9 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .sm-rank-score.neg{color:#f87171;}
 .sm-item-actions{display:flex;flex-direction:column;gap:6px;align-items:center;}
 .sm-load-btn{background:rgba(212,168,67,.15);color:var(--gold);border:none;border-radius:8px;padding:6px 10px;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
-.sm-del-btn{background:rgba(248,113,113,.12);color:#f87171;border:none;border-radius:8px;width:30px;height:30px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pname-dd{display:none;position:absolute;right:0;left:0;z-index:9999;background:#1e1e1e;border:1px solid rgba(255,255,255,0.15);border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);}
+.pname-dd-item{padding:12px 16px;font-family:'Tajawal',sans-serif;font-size:15px;color:#fff;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.07);text-align:right;}
+.pname-dd-item:last-child{border-bottom:none;}
 
 /* TOAST */
 .toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(140px);background:#1e1e1e;color:var(--gold);border:1px solid var(--border);border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;font-family:'Tajawal',sans-serif;z-index:9999;transition:transform .35s cubic-bezier(.21,1.02,.73,1),opacity .35s ease;pointer-events:none;white-space:nowrap;opacity:0;}
@@ -1129,12 +1131,23 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <button class="players-info-btn" style="color:#f87171;border-color:rgba(248,113,113,0.3);" onclick="clearSavedNames()">🗑 مسح الأسماء المحفوظة</button>
       </div>
       <div class="sm-players-grid">
-        <input class="sm-input sm-player-inp" id="pname_0" placeholder="اللاعب الأول" autocomplete="off">
-        <input class="sm-input sm-player-inp" id="pname_1" placeholder="اللاعب الثاني" autocomplete="off">
-        <input class="sm-input sm-player-inp" id="pname_2" placeholder="اللاعب الثالث" autocomplete="off">
-        <input class="sm-input sm-player-inp" id="pname_3" placeholder="اللاعب الرابع" autocomplete="off">
+        <div style="position:relative;">
+          <input class="sm-input sm-player-inp" id="pname_0" placeholder="اللاعب الأول" autocomplete="off">
+          <div id="pname_dd_0" class="pname-dd"></div>
+        </div>
+        <div style="position:relative;">
+          <input class="sm-input sm-player-inp" id="pname_1" placeholder="اللاعب الثاني" autocomplete="off">
+          <div id="pname_dd_1" class="pname-dd"></div>
+        </div>
+        <div style="position:relative;">
+          <input class="sm-input sm-player-inp" id="pname_2" placeholder="اللاعب الثالث" autocomplete="off">
+          <div id="pname_dd_2" class="pname-dd"></div>
+        </div>
+        <div style="position:relative;">
+          <input class="sm-input sm-player-inp" id="pname_3" placeholder="اللاعب الرابع" autocomplete="off">
+          <div id="pname_dd_3" class="pname-dd"></div>
+        </div>
       </div>
-      <div id="pname_dropdown" style="display:none;position:fixed;z-index:9999;background:#1e1e1e;border:1px solid rgba(255,255,255,0.15);border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);min-width:160px;"></div>
     </div>
   </div>
 </div>
@@ -1758,6 +1771,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </div>
 
 <script>
+window.onerror=function(msg,src,line,col,err){document.title='ERR L'+line+': '+String(msg).slice(0,50);return false;};
 /* ══ DATA ══ */
 let HT_HIND=[
   {name:"هاند",up:200,down:60,hand:250},
@@ -4119,109 +4133,90 @@ refreshDatalist();
 
 // ══ CUSTOM DROPDOWN AUTOCOMPLETE ══
 (function(){
-  var dropdown = document.getElementById('pname_dropdown');
-  var activeInput = null;
-
   function getMatches(val){
-    var names = getSavedPlayerNames();
+    var names=getSavedPlayerNames();
     if(!val) return names.slice(0,4);
-    var q = val.trim();
-    var filtered = names.filter(function(n){ return n.indexOf(q) !== -1; });
-    return filtered.slice(0,4);
+    return names.filter(function(n){return n.indexOf(val.trim())!==-1;}).slice(0,4);
   }
-
-  var activeIdx = -1;
-
-  function showDropdown(input, idx){
-    var matches = getMatches(input.value);
-    if(!matches.length){ hideDropdown(); return; }
-    dropdown.innerHTML = '';
-    matches.forEach(function(name){
-      var item = document.createElement('div');
-      item.textContent = name;
-      item.style.cssText = 'padding:12px 16px;font-family:Tajawal,sans-serif;font-size:15px;color:#fff;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.07);text-align:right;';
-      function selectName(e){
-        e.preventDefault();
-        var isDup = [0,1,2,3].some(function(j){
-          if(j===idx) return false;
-          var other = document.getElementById('pname_'+j);
-          return other && other.value.trim()===name;
-        });
-        if(isDup){ showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً'); return; }
-        input.value = name; hideDropdown();
-        input.dispatchEvent(new Event('input'));
-        input.dispatchEvent(new Event('blur'));
-      }
-      item.addEventListener('mousedown', selectName);
-      item.addEventListener('touchstart', selectName, {passive:false});
-      dropdown.appendChild(item);
+  function hideAll(){
+    [0,1,2,3].forEach(function(j){
+      var dd=document.getElementById('pname_dd_'+j);
+      if(dd) dd.style.display='none';
     });
-    var rect = input.getBoundingClientRect();
-    var itemHeight = 50;
-    var ddHeight = matches.length * itemHeight;
-    dropdown.style.display = 'block';
-    dropdown.style.top = (rect.top - ddHeight - 8) + 'px';
-    dropdown.style.right = (window.innerWidth - rect.right) + 'px';
-    dropdown.style.width = rect.width + 'px';
   }
-
-  function hideDropdown(){ dropdown.style.display = 'none'; activeInput = null; }
-
-  [0,1,2,3].forEach(function(i){
-    var inp = document.getElementById('pname_' + i);
-    if(!inp) return;
-    inp.addEventListener('focus', function(){ activeInput = inp; activeIdx = i; showDropdown(inp, i); });
-    inp.addEventListener('input', function(){
-      showDropdown(inp, i);
-      // التحقق من بدء اللعبة
-      var firstStarted = state[0] &&
-        (state[0].winner!==null && state[0].winner!==undefined ||
-         state[0].hind!==null && state[0].hind!==undefined);
-      if(firstStarted){
-        showToast('⚠️ لا يمكن تغيير الأسماء بعد بدء اللعبة');
-        inp.value = inp.dataset.locked||inp.value;
-        return;
-      }
-      // التحقق من التكرار
-      var currentName = inp.value.trim();
-      if(currentName){
-        var isDuplicate = [0,1,2,3].some(function(j){
-          if(j===i) return false;
-          var other = document.getElementById('pname_'+j);
-          return other && other.value.trim()===currentName;
+  function showDD(i,inp){
+    var dd=document.getElementById('pname_dd_'+i);
+    if(!dd) return;
+    var matches=getMatches(inp.value);
+    if(!matches.length){dd.style.display='none';return;}
+    dd.innerHTML='';
+    matches.forEach(function(name){
+      var item=document.createElement('div');
+      item.className='pname-dd-item';
+      item.textContent=name;
+      function pick(e){
+        e.preventDefault();
+        var dup=[0,1,2,3].some(function(j){
+          if(j===i)return false;
+          var o=document.getElementById('pname_'+j);
+          return o&&o.value.trim()===name;
         });
-        if(isDuplicate){ showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً'); inp.value=''; return; }
+        if(dup){showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً');return;}
+        inp.value=name; hideAll();
+        inp.dispatchEvent(new Event('input'));
+        setTimeout(function(){inp.dispatchEvent(new Event('blur'));},50);
       }
-      updateHcHeaders();
-      renderPenalties();
+      item.addEventListener('mousedown',pick);
+      item.addEventListener('touchstart',pick,{passive:false});
+      dd.appendChild(item);
+    });
+    // حساب الموقع: فوق أو تحت حسب المساحة المتاحة
+    dd.style.top=''; dd.style.bottom='';
+    var inpRect=inp.getBoundingClientRect();
+    var ddH=matches.length*50;
+    if(inpRect.top > ddH+16){
+      dd.style.bottom='calc(100% + 4px)'; dd.style.top='';
+    } else {
+      dd.style.top='calc(100% + 4px)'; dd.style.bottom='';
+    }
+    dd.style.display='block';
+  }
+  [0,1,2,3].forEach(function(i){
+    var inp=document.getElementById('pname_'+i);
+    if(!inp)return;
+    inp.addEventListener('focus',function(){showDD(i,inp);});
+    inp.addEventListener('input',function(){
+      showDD(i,inp);
+      var firstStarted=state[0]&&(state[0].winner!==null&&state[0].winner!==undefined||state[0].hind!==null&&state[0].hind!==undefined);
+      if(firstStarted){showToast('⚠️ لا يمكن تغيير الأسماء بعد بدء اللعبة');inp.value=inp.dataset.locked||inp.value;return;}
+      var cur=inp.value.trim();
+      if(cur){
+        var dup=[0,1,2,3].some(function(j){if(j===i)return false;var o=document.getElementById('pname_'+j);return o&&o.value.trim()===cur;});
+        if(dup){showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً');inp.value='';return;}
+      }
+      updateHcHeaders();renderPenalties();
       for(var r=0;r<N_ROUNDS;r++){
         var sw=document.getElementById('w_'+r);
-        if(sw){
-          var curVal=sw.value;
-          sw.innerHTML='<option value="">—</option>'+[0,1,2,3].map(function(k){return '<option value="'+k+'">'+getPlayerName(k)+'</option>';}).join('');
-          sw.value=curVal;
-        }
+        if(sw){var cv=sw.value;sw.innerHTML='<option value="">—</option>'+[0,1,2,3].map(function(k){return'<option value="'+k+'">'+getPlayerName(k)+'</option>';}).join('');sw.value=cv;}
         updateHandSel(r);
       }
     });
-    inp.addEventListener('blur', function(){
-      var finalName = inp.value.trim();
-      if(!finalName) return;
-      var isDup = [0,1,2,3].some(function(j){
-        if(j===i) return false;
-        var other = document.getElementById('pname_'+j);
-        return other && other.value.trim()===finalName;
-      });
-      if(isDup){ showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً'); inp.value=''; return; }
-      savePlayerName(finalName);
+    inp.addEventListener('blur',function(){
+      setTimeout(function(){hideAll();},150);
+      var fn=inp.value.trim();
+      if(!fn)return;
+      var dup=[0,1,2,3].some(function(j){if(j===i)return false;var o=document.getElementById('pname_'+j);return o&&o.value.trim()===fn;});
+      if(dup){showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً');inp.value='';return;}
+      savePlayerName(fn);
     });
   });
-
-  document.addEventListener('touchstart', function(e){
-    if(!dropdown.contains(e.target) && e.target !== activeInput) hideDropdown();
-  });
-  document.addEventListener('mousedown', function(e){
-    if(!dropdown.contains(e.target) && e.target !== activeInput) hideDropdown();
+  document.addEventListener('touchstart',function(e){
+    var inAny=[0,1,2,3].some(function(j){
+      var dd=document.getElementById('pname_dd_'+j);
+      var inp=document.getElementById('pname_'+j);
+      return (dd&&dd.contains(e.target))||(inp&&inp===e.target);
+    });
+    if(!inAny)hideAll();
   });
 })();
 </script>
