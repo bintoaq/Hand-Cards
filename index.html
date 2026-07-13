@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HandCards V1.1.1</title>
+<title>HandCards V1.1.2</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="HandCards V1.1.1">
+<meta name="apple-mobile-web-app-title" content="HandCards V1.1.2">
 <meta name="theme-color" content="#0F0F0F">
 <link rel="manifest" id="manifest-link">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Bebas+Neue&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
@@ -1121,19 +1121,20 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div class="sm-wrap">
   <div class="sm-form">
     <div class="sm-form-row">
-      <div style="display:flex;align-items:center;justify-content:flex-start;margin-bottom:4px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
         <button class="players-info-btn" onclick="openTip('players')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           ملاحظة
         </button>
+        <button class="players-info-btn" style="color:#f87171;border-color:rgba(248,113,113,0.3);" onclick="clearSavedNames()">🗑 مسح الأسماء المحفوظة</button>
       </div>
       <div class="sm-players-grid">
-        <input class="sm-input sm-player-inp" id="pname_0" placeholder="اللاعب الأول" list="pnames_list" autocomplete="off">
-        <input class="sm-input sm-player-inp" id="pname_1" placeholder="اللاعب الثاني" list="pnames_list" autocomplete="off">
-        <input class="sm-input sm-player-inp" id="pname_2" placeholder="اللاعب الثالث" list="pnames_list" autocomplete="off">
-        <input class="sm-input sm-player-inp" id="pname_3" placeholder="اللاعب الرابع" list="pnames_list" autocomplete="off">
+        <input class="sm-input sm-player-inp" id="pname_0" placeholder="اللاعب الأول" autocomplete="off">
+        <input class="sm-input sm-player-inp" id="pname_1" placeholder="اللاعب الثاني" autocomplete="off">
+        <input class="sm-input sm-player-inp" id="pname_2" placeholder="اللاعب الثالث" autocomplete="off">
+        <input class="sm-input sm-player-inp" id="pname_3" placeholder="اللاعب الرابع" autocomplete="off">
       </div>
-      <datalist id="pnames_list"></datalist>
+      <div id="pname_dropdown" style="display:none;position:fixed;z-index:9999;background:#1e1e1e;border:1px solid rgba(255,255,255,0.15);border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);min-width:160px;"></div>
     </div>
   </div>
 </div>
@@ -1221,7 +1222,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="cr-center" style="flex-direction:column;gap:0;line-height:1.4;text-align:center;flex:1;">
     <span style="font-family:'Cairo',sans-serif;font-size:11px;font-weight:900;color:var(--gold);">قيد لعبة الهاند</span>
     <span style="font-family:'Tajawal',sans-serif;font-size:10px;color:#fff;font-weight:500;">تصميم سلطان بن طوق المري</span>
-    <span class="cr-version" style="font-size:10px;">V1.1.1</span>
+    <span class="cr-version" style="font-size:10px;">V1.1.2</span>
   </div>
 </div>
 
@@ -1955,7 +1956,7 @@ function renderRow(r,vals){
     if(p===greenIdx)      el.style.color='#4ade80';
     else if(p===redIdx)   el.style.color='#f87171';
     else                  el.style.color='var(--gold)';
-    el.textContent=(v<0?'-':'')+toAr(v);
+    el.textContent=toAr(v);
   });
 }
 
@@ -2147,7 +2148,7 @@ function renderHandCards(){
       const rank = sortedByScore.indexOf(p);
       const scoreColorFinal = rank===0 ? '#4ade80' : (rank===sortedByScore.length-1 ? '#f87171' : 'var(--gold)');
       const sign = cum[p]<0?'-':'';
-      cell.innerHTML=`<span class="hc-val" style="color:${scoreColorFinal}">${sign}${toAr(cum[p])}</span><span class="badge ${rank===0?'tw':'tn'}">${medals[rank]} ${rankLabels[rank]}</span>`;
+      cell.innerHTML=`<span class="hc-val" style="color:${scoreColorFinal}">${toAr(cum[p])}</span><span class="badge ${rank===0?'tw':'tn'}">${medals[rank]} ${rankLabels[rank]}</span>`;
     }
     return;
   }
@@ -2176,7 +2177,7 @@ function renderHandCards(){
     const scoreColor = p===winnerIdx ? '#4ade80' : p===loserIdx ? '#f87171' : 'var(--gold)';
     if(p===winnerIdx){
       const sign=cum[p]<0?'-':'';
-      cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${sign}${toAr(cum[p])}</span><span class="badge tw">الفائز 🏆</span><span class="badge tn" style="font-size:7px;">هاند</span>`;
+      cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span><span class="badge tw">الفائز 🏆</span><span class="badge tn" style="font-size:7px;">هاند</span>`;
     }else{
       const diff=cum[p]-minVal;
       let options=[];
@@ -2201,14 +2202,14 @@ function renderHandCards(){
         }
         normalOptions.sort((a,b)=>a.gain-b.gain);
         if(!normalOptions.length){
-          cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${(cum[p]<0?'-':'')+toAr(cum[p])}</span><span class="badge tl">لا يمكن</span>`;
+          cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span><span class="badge tl">لا يمكن</span>`;
         } else {
-          cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${(cum[p]<0?'-':'')+toAr(cum[p])}</span><span class="badge tn">${normalOptions[0].label}</span>`;
+          cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span><span class="badge tn">${normalOptions[0].label}</span>`;
         }
       } else {
         const best = options[0];
         const alt = options.find(o => o.label !== best.label) || null;
-        let html=`<span class="hc-val" style="color:${scoreColor}">${(cum[p]<0?'-':'')+toAr(cum[p])}</span>`;
+        let html=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span>`;
         html+=`<span class="badge tn">${best.label}</span>`;
         if(alt) html+=`<span class="badge hc-alt">أو ${alt.label}</span>`;
         cell.innerHTML=html;
@@ -2797,6 +2798,11 @@ function pwdCancel(){
   _deleteId=null; _deleteType=null;
 }
 
+/* ══ DEBOUNCE: تأخير تنفيذ الدوال الثقيلة لتجنب البطء ══ */
+var _top3Timer=null;
+var _sessListTimer=null;
+var _renderTop3Orig=null; // يُعيَّن بعد تعريف renderTop3
+
 function renderSessionList(){
   var sessions=getSessions();
   var list=document.getElementById('sm_list');
@@ -2981,10 +2987,23 @@ function renderProsBoard(){
         wins: 0,
         lastPlace: 0,
         sessions: 0,
+        points: 0,
         bestWinScore: null,
         worstLossScore: null
       };
       stats[name].sessions++;
+
+      // نقاط المركز: ١st=4، ٢nd=3، ٣rd=2، ٤th=1
+      var rank;
+      if(rankOf){
+        rank = rankOf[p]; // 0=أول، 1=ثاني، 2=ثالث، 3=رابع
+      } else {
+        // احسب المركز من ترتيب النقاط (الأقل = أفضل)
+        var sortedScores = scores.slice().sort(function(a,b){return a-b;});
+        rank = sortedScores.indexOf(score);
+        if(rank < 0) rank = 3;
+      }
+      stats[name].points += (4 - rank); // 0→4، 1→3، 2→2، 3→1
 
       if(p === winnerIdx){
         stats[name].wins++;
@@ -3033,13 +3052,11 @@ function renderProsBoard(){
     }).join('');
   }
 
-  // ── جدول ١: أفضل اللاعبين ──
-  // نسبة المرات التي جاء فيها أول ← عند التساوي: عدد الفوز الأكثر
-  var bestPlayers = allPlayers.filter(function(p){ return p.wins > 0; })
+  // ── جدول ١: أفضل اللاعبين ── حسب مجموع النقاط المكتسبة
+  var bestPlayers = allPlayers.filter(function(p){ return p.sessions > 0; })
     .sort(function(a,b){
-      var rA = a.wins/a.sessions, rB = b.wins/b.sessions;
-      if(rB !== rA) return rB - rA;
-      if(b.wins !== a.wins) return b.wins - a.wins;
+      if(b.points !== a.points) return b.points - a.points;
+      // عند التعادل → أفضل رقم قياسي (أكثر سلبية)
       var bsA = a.bestWinScore !== null ? a.bestWinScore : Infinity;
       var bsB = b.bestWinScore !== null ? b.bestWinScore : Infinity;
       return bsA - bsB;
@@ -3048,8 +3065,8 @@ function renderProsBoard(){
   var bestEl = document.getElementById('pros_best_body');
   bestEl.innerHTML = bestPlayers.length
     ? makeRowsEmoji(bestPlayers,
-        function(p){ return '<span style="color:#4ade80;">'+toAr(Math.round(p.wins/p.sessions*100))+'%</span>'; },
-        function(p){ return toAr(p.wins)+' مرة أول من '+toAr(p.sessions)+' جولة'; })
+        function(p){ return '<span style="color:#4ade80;">'+toAr(p.points)+' نقطة</span>'; },
+        function(p){ return toAr(p.wins)+' فوز من '+toAr(p.sessions)+' جولة'; })
     : '<div class="pros-empty">لا توجد نتائج بعد</div>';
 
   // ── جدول ٣: أفضل رقم قياسي للفوز ── Top 3 مع أيقونات
@@ -3160,7 +3177,15 @@ function renderTop3(){
   });
 }
 
-/* ══ PANELS ══ */
+/* ══ DEBOUNCE WRAPPERS ══ */
+var _renderTop3Real = renderTop3;
+var _renderTop3Timer = null;
+renderTop3 = function(){
+  clearTimeout(_renderTop3Timer);
+  _renderTop3Timer = setTimeout(_renderTop3Real, 120);
+};
+
+
 function openPanel(name){
   // إذا settings: حمّل القيم الحالية
   if(name==='settings') loadSettingsUI();
@@ -4069,65 +4094,134 @@ function getSavedPlayerNames(){
   try{ return JSON.parse(localStorage.getItem('hc_player_names')||'[]'); }catch(e){ return []; }
 }
 function savePlayerName(name){
-  if(!name||name.length<2) return;
+  if(!name||name.length<3) return;
   let names=getSavedPlayerNames();
   if(names.includes(name)) return;
   names.unshift(name);
   if(names.length>100) names=names.slice(0,100);
   try{ localStorage.setItem('hc_player_names', JSON.stringify(names)); }catch(e){}
 }
-function refreshDatalist(){
-  const dl=document.getElementById('pnames_list');
-  if(!dl) return;
-  const names=getSavedPlayerNames();
-  dl.innerHTML=names.map(n=>`<option value="${n}">`).join('');
+function refreshDatalist(){ /* لا يحتاج تحديث — القائمة مخصصة */ }
+function clearSavedNames(){
+  try{ localStorage.removeItem('hc_player_names'); }catch(e){}
+  showToast('✅ تم مسح الأسماء المحفوظة');
 }
+// تنظيف الأسماء القصيرة المحفوظة (أقل من ٣ أحرف)
+(function(){
+  try{
+    var names = getSavedPlayerNames();
+    var cleaned = names.filter(function(n){ return n && n.trim().length >= 3; });
+    if(cleaned.length !== names.length)
+      localStorage.setItem('hc_player_names', JSON.stringify(cleaned));
+  }catch(e){}
+})();
 refreshDatalist();
 
-// تحديث خانة "من يد" و"الفائز" عند تغيير اسم اللاعب
-[0,1,2,3].forEach(p=>{
-  const el=document.getElementById(`pname_${p}`);
-  if(el) el.addEventListener('input',()=>{
-    // لا يُقبل تغيير الاسم إذا بدأت الجولة الأولى
-    const firstStarted = state[0] &&
-      (state[0].winner!==null && state[0].winner!==undefined ||
-       state[0].hind!==null && state[0].hind!==undefined);
-    if(firstStarted){
-      showToast('⚠️ لا يمكن تغيير الأسماء بعد بدء اللعبة');
-      el.value = el.dataset.locked||el.value;
-      return;
-    }
-    // التحقق من الأسماء المكررة
-    const currentName = el.value.trim();
-    if(currentName){
-      const isDuplicate = [0,1,2,3].some(i=>{
-        if(i===p) return false;
-        const other=document.getElementById(`pname_${i}`);
-        return other && other.value.trim() === currentName;
-      });
-      if(isDuplicate){
-        showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً');
-        el.value='';
+// ══ CUSTOM DROPDOWN AUTOCOMPLETE ══
+(function(){
+  var dropdown = document.getElementById('pname_dropdown');
+  var activeInput = null;
+
+  function getMatches(val){
+    var names = getSavedPlayerNames();
+    if(!val) return names.slice(0,4);
+    var q = val.trim();
+    var filtered = names.filter(function(n){ return n.indexOf(q) !== -1; });
+    return filtered.slice(0,4);
+  }
+
+  var activeIdx = -1;
+
+  function showDropdown(input, idx){
+    var matches = getMatches(input.value);
+    if(!matches.length){ hideDropdown(); return; }
+    dropdown.innerHTML = '';
+    matches.forEach(function(name){
+      var item = document.createElement('div');
+      item.textContent = name;
+      item.style.cssText = 'padding:12px 16px;font-family:Tajawal,sans-serif;font-size:15px;color:#fff;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.07);text-align:right;';
+      function selectName(e){
+        e.preventDefault();
+        var isDup = [0,1,2,3].some(function(j){
+          if(j===idx) return false;
+          var other = document.getElementById('pname_'+j);
+          return other && other.value.trim()===name;
+        });
+        if(isDup){ showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً'); return; }
+        input.value = name; hideDropdown();
+        input.dispatchEvent(new Event('input'));
+        input.dispatchEvent(new Event('blur'));
+      }
+      item.addEventListener('mousedown', selectName);
+      item.addEventListener('touchstart', selectName, {passive:false});
+      dropdown.appendChild(item);
+    });
+    var rect = input.getBoundingClientRect();
+    dropdown.style.display = 'block';
+    dropdown.style.top = (rect.bottom + 4) + 'px';
+    dropdown.style.right = (window.innerWidth - rect.right) + 'px';
+    dropdown.style.width = rect.width + 'px';
+  }
+
+  function hideDropdown(){ dropdown.style.display = 'none'; activeInput = null; }
+
+  [0,1,2,3].forEach(function(i){
+    var inp = document.getElementById('pname_' + i);
+    if(!inp) return;
+    inp.addEventListener('focus', function(){ activeInput = inp; activeIdx = i; showDropdown(inp, i); });
+    inp.addEventListener('input', function(){
+      showDropdown(inp, i);
+      // التحقق من بدء اللعبة
+      var firstStarted = state[0] &&
+        (state[0].winner!==null && state[0].winner!==undefined ||
+         state[0].hind!==null && state[0].hind!==undefined);
+      if(firstStarted){
+        showToast('⚠️ لا يمكن تغيير الأسماء بعد بدء اللعبة');
+        inp.value = inp.dataset.locked||inp.value;
         return;
       }
-    }
-    updateHcHeaders();
-    renderPenalties();
-    // حفظ الاسم في قائمة الـ autocomplete
-    const finalName = el.value.trim();
-    if(finalName) { savePlayerName(finalName); refreshDatalist(); }
-    for(let r=0;r<N_ROUNDS;r++){
-      // تحديث قائمة الفائز
-      const sw=document.getElementById(`w_${r}`);
-      if(sw){
-        const curVal=sw.value;
-        sw.innerHTML='<option value="">—</option>'+[0,1,2,3].map(i=>`<option value="${i}">${getPlayerName(i)}</option>`).join('');
-        sw.value=curVal;
+      // التحقق من التكرار
+      var currentName = inp.value.trim();
+      if(currentName){
+        var isDuplicate = [0,1,2,3].some(function(j){
+          if(j===i) return false;
+          var other = document.getElementById('pname_'+j);
+          return other && other.value.trim()===currentName;
+        });
+        if(isDuplicate){ showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً'); inp.value=''; return; }
       }
-      updateHandSel(r);
-    }
+      updateHcHeaders();
+      renderPenalties();
+      for(var r=0;r<N_ROUNDS;r++){
+        var sw=document.getElementById('w_'+r);
+        if(sw){
+          var curVal=sw.value;
+          sw.innerHTML='<option value="">—</option>'+[0,1,2,3].map(function(k){return '<option value="'+k+'">'+getPlayerName(k)+'</option>';}).join('');
+          sw.value=curVal;
+        }
+        updateHandSel(r);
+      }
+    });
+    inp.addEventListener('blur', function(){
+      var finalName = inp.value.trim();
+      if(!finalName) return;
+      var isDup = [0,1,2,3].some(function(j){
+        if(j===i) return false;
+        var other = document.getElementById('pname_'+j);
+        return other && other.value.trim()===finalName;
+      });
+      if(isDup){ showToast('⚠️ الاسم مكرر — اختر اسماً مختلفاً'); inp.value=''; return; }
+      savePlayerName(finalName);
+    });
   });
-});
+
+  document.addEventListener('touchstart', function(e){
+    if(!dropdown.contains(e.target) && e.target !== activeInput) hideDropdown();
+  });
+  document.addEventListener('mousedown', function(e){
+    if(!dropdown.contains(e.target) && e.target !== activeInput) hideDropdown();
+  });
+})();
 </script>
 </body>
 </html>
