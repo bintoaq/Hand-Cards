@@ -2,11 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HandCards V1.1.2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HandCards V1.1.4</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="HandCards V1.1.2">
+<meta name="apple-mobile-web-app-title" content="HandCards V1.1.4">
 <meta name="theme-color" content="#0F0F0F">
 <link rel="manifest" id="manifest-link">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Bebas+Neue&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
@@ -65,6 +65,17 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ht-sel:focus{border-color:var(--gold);}
 .ht-sel option{background:var(--card2);}
 .sel-winner{font-size:7px;}.sel-hind{font-size:8px;}.sel-hand{font-size:7px;}
+/* صندوق عرض مخصص يستبدل select الأصلي (لتجاوز محاذاة القائمة الأصلية في iOS، ويسمح بلف النص الطويل بدل قصّه) */
+.ht-sel-display{width:100%;background:var(--inp);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 8px 5px 2px;font-family:'Tajawal',sans-serif;font-weight:700;line-height:1.2;text-align:right;direction:rtl;cursor:pointer;white-space:normal;overflow:hidden;word-break:break-word;-webkit-user-select:none;user-select:none;box-sizing:border-box;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+.ht-sel-display:active{border-color:var(--gold);}
+.ht-sel-display.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+.gsel-dropdown{position:fixed;background:#1c1c1c;border:1px solid var(--gold);border-radius:10px;z-index:99999;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.8);display:none;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+.gsel-dropdown.open{display:block;}
+.gsel-item{padding:10px 14px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:flex-start;gap:6px;direction:rtl;text-align:right;white-space:nowrap;}
+.gsel-item:last-child{border-bottom:none;}
+.gsel-item:active{background:rgba(212,168,67,0.18);}
+.gsel-item.sel{color:var(--gold);}
+.gsel-check{font-size:11px;color:var(--gold);}
 .ht-cell-res{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;font-family:'Tajawal',sans-serif;border-left:1px solid var(--border);padding:4px 1px;color:var(--gold);text-align:center;}
 .ht-cell-res.neg{color:#f87171;}.ht-cell-res.pos{color:var(--gold);}.ht-cell-res.empty{color:var(--muted);font-size:11px;font-weight:400;}
 
@@ -193,7 +204,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .sm-input{background:var(--inp);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;outline:none;width:100%;color-scheme:dark;}
 .sm-input:focus{border-color:var(--gold);}
 .sm-input::placeholder{color:#444;}
-.sm-player-inp{font-size:12px;padding:8px 10px;}
+.sm-player-inp{font-size:16px;padding:8px 10px;-webkit-text-size-adjust:100%;}
 .sm-btn{padding:12px;border-radius:10px;border:none;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;width:100%;}
 .sm-btn-save{background:var(--gold);color:#0F0F0F;}
 .sm-btn-save:active{transform:scale(.96);}
@@ -211,9 +222,17 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .sm-rank-score.neg{color:#f87171;}
 .sm-item-actions{display:flex;flex-direction:column;gap:6px;align-items:center;}
 .sm-load-btn{background:rgba(212,168,67,.15);color:var(--gold);border:none;border-radius:8px;padding:6px 10px;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
-.pname-dd{display:none;position:absolute;right:0;left:0;z-index:9999;background:#1e1e1e;border:1px solid rgba(255,255,255,0.15);border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);}
-.pname-dd-item{padding:12px 16px;font-family:'Tajawal',sans-serif;font-size:15px;color:#fff;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.07);text-align:right;}
-.pname-dd-item:last-child{border-bottom:none;}
+.sm-del-btn{background:rgba(248,113,113,.15);border:none;border-radius:8px;color:#f87171;font-size:16px;font-weight:700;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.sm-del-btn:active{transform:scale(.9);}
+.ac-wrap{position:relative;width:100%;}
+.ac-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#1e1e1e;border:1px solid var(--gold);border-radius:12px;z-index:4000;max-height:200px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.8);display:none;box-sizing:border-box;}
+.ac-dropdown.ac-above{top:auto;bottom:calc(100% + 4px);}
+.ac-dropdown.open{display:block;}
+.ac-item{padding:12px 16px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:600;color:#fff;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px;transition:background .15s;}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:active{background:rgba(212,168,67,0.18);}
+.ac-item-icon{font-size:12px;opacity:.45;flex-shrink:0;}
+.ac-item-text{flex:1;direction:rtl;text-align:right;}
 
 /* TOAST */
 .toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(140px);background:#1e1e1e;color:var(--gold);border:1px solid var(--border);border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;font-family:'Tajawal',sans-serif;z-index:9999;transition:transform .35s cubic-bezier(.21,1.02,.73,1),opacity .35s ease;pointer-events:none;white-space:nowrap;opacity:0;}
@@ -1117,6 +1136,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <span class="pros-board-label">لوحة المحترفين</span>
   <span class="pros-board-arrow">←</span>
 </button>
+<button class="pros-board-btn archive-board-btn" onclick="openPanel('archive')">
+  <span class="pros-board-icon">📅</span>
+  <span class="pros-board-label">الأرشيف الشهري</span>
+  <span class="pros-board-arrow">←</span>
+</button>
 
 <!-- PLAYERS NAMES -->
 <div class="divider"><div class="divider-line"></div><div class="divider-label">اللاعبين</div><div class="divider-line"></div></div>
@@ -1131,21 +1155,21 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <button class="players-info-btn" style="color:#f87171;border-color:rgba(248,113,113,0.3);" onclick="clearSavedNames()">🗑 مسح الأسماء المحفوظة</button>
       </div>
       <div class="sm-players-grid">
-        <div style="position:relative;">
+        <div class="ac-wrap">
           <input class="sm-input sm-player-inp" id="pname_0" placeholder="اللاعب الأول" autocomplete="off">
-          <div id="pname_dd_0" class="pname-dd"></div>
+          <div id="pname_dd_0" class="ac-dropdown"></div>
         </div>
-        <div style="position:relative;">
+        <div class="ac-wrap">
           <input class="sm-input sm-player-inp" id="pname_1" placeholder="اللاعب الثاني" autocomplete="off">
-          <div id="pname_dd_1" class="pname-dd"></div>
+          <div id="pname_dd_1" class="ac-dropdown"></div>
         </div>
-        <div style="position:relative;">
+        <div class="ac-wrap">
           <input class="sm-input sm-player-inp" id="pname_2" placeholder="اللاعب الثالث" autocomplete="off">
-          <div id="pname_dd_2" class="pname-dd"></div>
+          <div id="pname_dd_2" class="ac-dropdown"></div>
         </div>
-        <div style="position:relative;">
+        <div class="ac-wrap">
           <input class="sm-input sm-player-inp" id="pname_3" placeholder="اللاعب الرابع" autocomplete="off">
-          <div id="pname_dd_3" class="pname-dd"></div>
+          <div id="pname_dd_3" class="ac-dropdown"></div>
         </div>
       </div>
     </div>
@@ -1235,7 +1259,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="cr-center" style="flex-direction:column;gap:0;line-height:1.4;text-align:center;flex:1;">
     <span style="font-family:'Cairo',sans-serif;font-size:11px;font-weight:900;color:var(--gold);">قيد لعبة الهاند</span>
     <span style="font-family:'Tajawal',sans-serif;font-size:10px;color:#fff;font-weight:500;">تصميم سلطان بن طوق المري</span>
-    <span class="cr-version" style="font-size:10px;">V1.1.2</span>
+    <span class="cr-version" style="font-size:10px;">V1.1.4</span>
   </div>
 </div>
 
@@ -1487,6 +1511,18 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 </div>
+<div class="pwd-overlay" id="month_archive_overlay">
+  <div class="pwd-box" style="max-width:340px;">
+    <div class="pwd-title">💾 حفظ نتائج الشهر</div>
+    <div style="font-family:'Tajawal',sans-serif;font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px;">
+      سيتم حفظ نتائج شهر <span id="month_archive_prev_label" style="color:#fff;font-weight:700;"></span> في الأرشيف، ثم مسح جميع الجولات المحفوظة حالياً نهائياً.<br>لا يمكن التراجع عن هذا الإجراء.
+    </div>
+    <div class="pwd-btns">
+      <button class="pwd-confirm green" onclick="doArchiveMonth()">نعم، احفظ وامسح</button>
+      <button class="pwd-cancel" onclick="closeMonthArchiveModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
 <div class="slide-panel" id="info_panel">
   <div class="panel-handle"></div>
   <div class="panel-header">
@@ -1704,6 +1740,19 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
+<!-- ══ ARCHIVE PANEL ══ -->
+<div class="slide-panel" id="archive_panel">
+  <div class="panel-handle"></div>
+  <div class="panel-header">
+    <div class="panel-title">📅 الأرشيف الشهري</div>
+    <button class="panel-close" onclick="closePanel()">×</button>
+  </div>
+  <div class="panel-body">
+    <button onclick="openManualArchiveConfirm()" style="width:100%;margin-bottom:16px;padding:12px;background:linear-gradient(135deg,#9b1c1c 0%,#6b1414 100%);border:none;border-radius:12px;color:#fff;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💾 حفظ نتائج الشهر ومسح البيانات</button>
+    <div id="archive_body"><div class="pros-empty">لا يوجد أرشيف بعد</div></div>
+  </div>
+</div>
+
 <!-- ══ TIP MODAL ══ -->
 <div class="tip-overlay" id="tip_overlay" onclick="closeTip(event)">
   <div class="tip-box">
@@ -1814,12 +1863,121 @@ function showToast(msg){
 
 function makeSel(id,opts,cls,cb){
   const s=document.createElement('select');
-  s.className='ht-sel '+cls; s.id=id;
+  s.className='ht-sel '+cls; s.id=id; s.style.display='none';
   const ph=document.createElement('option');
   ph.value=''; ph.textContent='—'; ph.selected=true; s.appendChild(ph);
   opts.forEach((o,i)=>{const op=document.createElement('option');op.value=i;op.textContent=o;s.appendChild(op);});
   s.addEventListener('change',cb);
+  s._disp = makeSelDisplay(s, cls);
   return s;
+}
+
+/* ══ قائمة منسدلة مخصصة بديلة لـ <select> الأصلية ══
+   السبب: المتصفح على iOS يفرض توسيط نص القائمة المنبثقة الأصلية للـ <select>
+   ولا يمكن التحكم بمحاذاتها عبر CSS، كما أن الصندوق الأصلي يقصّ النص الطويل
+   (مثل "هاند كلور زاته جوكرين"). الحل: نُخفي <select> (يبقى يعمل كمصدر بيانات
+   فقط كما كان تماماً)، ونعرض بدلاً منه صندوقاً مصمماً بالكود يلف النص الطويل
+   مع قائمة منسدلة مخصصة محاذية لليمين بالكامل. */
+function makeSelDisplay(selectEl, cls){
+  const disp=document.createElement('div');
+  disp.className='ht-sel-display '+(cls||'');
+  disp.textContent='—';
+  disp.addEventListener('click',()=>gselOpen(disp,selectEl));
+  makeSelReactive(selectEl, disp);
+  return disp;
+}
+
+// يربط صندوق العرض بعنصر select الحقيقي: أي تغيير لاحق على value/disabled
+// (من أي مكان في الكود، بنفس الطريقة المستخدمة دائماً) يحدّث الصندوق تلقائياً
+function makeSelReactive(selectEl, dispEl){
+  function sync(){
+    const opt = selectEl.options[selectEl.selectedIndex];
+    dispEl.textContent = (opt && opt.value!=='') ? opt.textContent : '—';
+    dispEl.classList.toggle('disabled', !!selectEl.disabled);
+  }
+  const valueDesc = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value');
+  if(valueDesc){
+    Object.defineProperty(selectEl,'value',{
+      get(){ return valueDesc.get.call(this); },
+      set(v){ valueDesc.set.call(this,v); sync(); },
+      configurable:true
+    });
+  }
+  const disabledDesc = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'disabled')
+    || Object.getOwnPropertyDescriptor(HTMLElement.prototype,'disabled');
+  if(disabledDesc){
+    Object.defineProperty(selectEl,'disabled',{
+      get(){ return disabledDesc.get.call(this); },
+      set(v){ disabledDesc.set.call(this,v); sync(); },
+      configurable:true
+    });
+  }
+  selectEl.addEventListener('change', sync);
+  sync();
+}
+
+let _gselCurrentSelect=null;
+function gselClose(){
+  const dd=document.getElementById('gsel_dropdown');
+  if(dd){ dd.classList.remove('open'); dd.innerHTML=''; }
+  _gselCurrentSelect=null;
+  document.removeEventListener('click', gselOutsideClick, true);
+}
+function gselOutsideClick(e){
+  const dd=document.getElementById('gsel_dropdown');
+  if(dd && dd.classList.contains('open') && !dd.contains(e.target) && !e.target.closest('.ht-sel-display')) gselClose();
+}
+function gselOpen(dispEl, selectEl){
+  if(selectEl.disabled) return;
+  if(_gselCurrentSelect===selectEl){ gselClose(); return; }
+  gselClose();
+  let dd=document.getElementById('gsel_dropdown');
+  if(!dd){
+    dd=document.createElement('div');
+    dd.id='gsel_dropdown'; dd.className='gsel-dropdown';
+    document.body.appendChild(dd);
+  }
+  const opts=Array.from(selectEl.options);
+  dd.innerHTML = opts.map(o=>{
+    const isSel = (o.value===selectEl.value);
+    const label = o.value===''? '—' : o.textContent;
+    return `<div class="gsel-item${isSel?' sel':''}" data-v="${o.value.replace(/"/g,'&quot;')}">`+
+           (isSel?'<span class="gsel-check">✓</span>':'')+
+           `<span class="gsel-text">${label}</span></div>`;
+  }).join('');
+  dd.querySelectorAll('.gsel-item').forEach(it=>{
+    it.addEventListener('mousedown', (e)=>{
+      e.preventDefault();
+      selectEl.value = it.getAttribute('data-v');
+      selectEl.dispatchEvent(new Event('change'));
+      gselClose();
+    });
+  });
+  const r = dispEl.getBoundingClientRect();
+  dd.style.minWidth = Math.max(r.width, 120)+'px';
+  // نُظهر مخفياً أولاً لقياس الحجم الحقيقي
+  dd.style.visibility = 'hidden';
+  dd.classList.add('open');
+  // نقيس بعد ما يُرسم
+  requestAnimationFrame(()=>{
+    const ddh = dd.offsetHeight;
+    const ddw = dd.offsetWidth;
+    const vh = window.innerHeight;
+    const vw = window.innerWidth;
+    // أفضل position: أسفل الزر إذا في مساحة، وإلا فوقه
+    let top = r.bottom + 4;
+    if(top + ddh > vh - 70) top = r.top - ddh - 4; // 70 = nav bar height
+    if(top < 8) top = 8;
+    // أفضل position أفقياً: من يمين الزر للـ RTL، مع عدم الخروج من الشاشة
+    let left = r.right - ddw;
+    if(left < 8) left = 8;
+    if(left + ddw > vw - 8) left = vw - ddw - 8;
+    dd.style.left = left+'px';
+    dd.style.top = top+'px';
+    dd.style.visibility = '';
+  });
+  _gselCurrentSelect = selectEl;
+  setTimeout(()=>document.addEventListener('click', gselOutsideClick, true), 0);
 }
 
 /* ══ GAME LOGIC ══ */
@@ -2037,7 +2195,7 @@ function buildTable(){
 
     const cw=document.createElement('div'); cw.className='ht-cell-sel';
     const sw=document.createElement('select');
-    sw.className='ht-sel sel-winner'; sw.id=`w_${r}`;
+    sw.className='ht-sel sel-winner'; sw.id=`w_${r}`; sw.style.display='none';
     sw.innerHTML='<option value="">—</option>'+[0,1,2,3].map(i=>`<option value="${i}">${getPlayerName(i)}</option>`).join('');
     sw.addEventListener('change',()=>{
       if(!allPlayersNamed()){showToast('⚠️ أدخل أسماء اللاعبين الأربعة أولاً');sw.value='';return;}
@@ -2065,7 +2223,8 @@ function buildTable(){
       updateFrom(r);
       lockCompletedRows();
     });
-    cw.appendChild(sw); row.appendChild(cw);
+    const swDisp = makeSelDisplay(sw,'sel-winner');
+    cw.appendChild(sw); cw.appendChild(swDisp); row.appendChild(cw);
 
     const ch=document.createElement('div'); ch.className='ht-cell-sel';
     const sh=makeSel(`h_${r}`,HT_HIND.map(h=>h.name),'sel-hind',()=>{
@@ -2087,18 +2246,19 @@ function buildTable(){
       updateFrom(r);
       lockCompletedRows();
     });
-    ch.appendChild(sh); row.appendChild(ch);
+    ch.appendChild(sh); ch.appendChild(sh._disp); row.appendChild(ch);
 
     const cy=document.createElement('div'); cy.className='ht-cell-sel';
     const sy=document.createElement('select');
-    sy.className='ht-sel sel-hand'; sy.id=`hy_${r}`;
+    sy.className='ht-sel sel-hand'; sy.id=`hy_${r}`; sy.style.display='none';
     sy.innerHTML='<option value="">—</option>';
     sy.addEventListener('change',()=>{
       state[r].hand=sy.value===''?null:+sy.value;
       updateFrom(r);
       lockCompletedRows();
     });
-    cy.appendChild(sy); row.appendChild(cy);
+    const syDisp = makeSelDisplay(sy,'sel-hand');
+    cy.appendChild(sy); cy.appendChild(syDisp); row.appendChild(cy);
 
     for(let p=0;p<4;p++){const cr=document.createElement('div');cr.className='ht-cell-res empty';cr.id=`res_${r}_${p}`;cr.textContent='—';row.appendChild(cr);}
     tb.appendChild(row);
@@ -2185,49 +2345,93 @@ function renderHandCards(){
     return cum.indexOf(mx);
   })();
 
+  // ── جدول الخيارات الثابت — يمنع اقتراح هاند يحتاج جوكر كبديل لهاند يحتاج جوكر أصلاً ──
+  const HC_OPTIONS = {
+    'هاند':                              [],
+    'هاند من اليد':                      ['هاند جوكر','هاند كلور'],
+    'هاند جوكر':                         ['هاند كلور'],
+    'هاند جوكر من اليد':                 ['هاند كلور'],
+    'هاند كلور':                          [],
+    'هاند كلور من اليد':                  ['هاند جوكرين','هاند كلور جوكر'],
+    'هاند جوكرين':                        ['هاند كلور جوكر','هاند كلور زاته'],
+    'هاند جوكرين من اليد':               ['هاند كلور جوكر','هاند كلور زاته'],
+    'هاند كلور جوكر':                     ['هاند كلور زاته'],
+    'هاند كلور جوكر من اليد':            ['هاند كلور جوكرين','هاند كلور زاته'],
+    'هاند كلور جوكرين':                   ['هاند كلور زاته'],
+    'هاند كلور جوكرين من اليد':          ['هاند كلور زاته'],
+    'هاند كلور زاته':                     [],
+    'هاند كلور زاته من اليد':            ['هاند كلور زاته جوكر','هاند كلور زاته جوكرين','لا يمكن'],
+    'هاند كلور زاته جوكر':               ['لا يمكن'],
+    'هاند كلور زاته جوكر من اليد':      ['هاند كلور زاته جوكرين','لا يمكن'],
+    'هاند كلور زاته جوكرين':             ['لا يمكن'],
+    'هاند كلور زاته جوكرين من اليد':    ['لا يمكن'],
+  };
+
   for(let p=0;p<4;p++){
     const cell=document.getElementById(`hc_${p}`);
     // لون النتيجة
     const scoreColor = p===winnerIdx ? '#4ade80' : p===loserIdx ? '#f87171' : 'var(--gold)';
+    const scoreStr=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span>`;
     if(p===winnerIdx){
       const sign=cum[p]<0?'-':'';
       cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span><span class="badge tw">الفائز 🏆</span><span class="badge tn" style="font-size:7px;">هاند</span>`;
     }else{
       const diff=cum[p]-minVal;
-      let options=[];
-      for(let i=0;i<HT_HIND.length;i++){
-        const h=HT_HIND[i];
-        const gainNormal = h.down + h.up;
-        const gainFromHand = h.down + h.hand;
-        if(gainNormal > diff) options.push({gain:gainNormal, label:h.name, fromHand:false});
-        // "من اليد" فقط للاعب الذي ستكون اليد عنده في الجولة القادمة
-        if(p === nextHandPlayer && gainFromHand > diff && h.hand > 0)
-          options.push({gain:gainFromHand, label:h.name+' من اليد', fromHand:true});
-      }
-      options.sort((a,b)=>a.gain-b.gain);
 
-      if(!options.length){
-        // لا يوجد هاند عادي كافٍ — نبحث عن أقل هاند ممكن بدون "من اليد"
-        let normalOptions=[];
+      // أقل هاند عادي يكفي
+      let bN=null;
+      for(let i=0;i<HT_HIND.length;i++){
+        if(HT_HIND[i].down+HT_HIND[i].up>diff){bN=i;break;}
+      }
+      // أقل هاند "من اليد" يكفي
+      let bF=null;
+      if(p===nextHandPlayer){
         for(let i=0;i<HT_HIND.length;i++){
           const h=HT_HIND[i];
-          const gainNormal = h.down + h.up;
-          if(gainNormal > diff) normalOptions.push({gain:gainNormal, label:h.name});
+          if(h.hand>0&&h.down+h.hand>diff){bF=i;break;}
         }
-        normalOptions.sort((a,b)=>a.gain-b.gain);
-        if(!normalOptions.length){
-          cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span><span class="badge tl">لا يمكن</span>`;
-        } else {
-          cell.innerHTML=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span><span class="badge tn">${normalOptions[0].label}</span>`;
-        }
-      } else {
-        const best = options[0];
-        const alt = options.find(o => o.label !== best.label) || null;
-        let html=`<span class="hc-val" style="color:${scoreColor}">${toAr(cum[p])}</span>`;
-        html+=`<span class="badge tn">${best.label}</span>`;
-        if(alt) html+=`<span class="badge hc-alt">أو ${alt.label}</span>`;
-        cell.innerHTML=html;
       }
+
+      if(bN===null&&bF===null){
+        cell.innerHTML=scoreStr+`<span class="badge tl">لا يمكن</span>`;
+        continue;
+      }
+
+      const gainN=bN!==null?HT_HIND[bN].down+HT_HIND[bN].up:Infinity;
+      const gainF=bF!==null?HT_HIND[bF].down+HT_HIND[bF].hand:Infinity;
+
+      // نفس الهاند يكفي بالطريقتين
+      if(bF!==null&&bN!==null&&bF===bN){
+        cell.innerHTML=scoreStr+
+          `<span class="badge tn">${HT_HIND[bN].name}</span>`+
+          `<span class="badge hc-alt">أو ${HT_HIND[bN].name} من اليد</span>`;
+        continue;
+      }
+
+      // الأسهل gain
+      let firstLabel, firstIdx;
+      if(gainF<gainN){ firstLabel=HT_HIND[bF].name+' من اليد'; firstIdx=bF; }
+      else { firstLabel=HT_HIND[bN].name; firstIdx=bN; }
+
+      // إذا الخيار الأول عادي وكان "من اليد" لنفسه يكفي → عادي + من اليد فقط
+      const isFirstNormal=!firstLabel.endsWith(' من اليد');
+      if(isFirstNormal&&p===nextHandPlayer&&HT_HIND[firstIdx].hand>0&&
+         HT_HIND[firstIdx].down+HT_HIND[firstIdx].hand>diff){
+        cell.innerHTML=scoreStr+
+          `<span class="badge tn">${firstLabel}</span>`+
+          `<span class="badge hc-alt">أو ${firstLabel} من اليد</span>`;
+        continue;
+      }
+
+      const extras=HC_OPTIONS[firstLabel]||[];
+      let html=scoreStr+`<span class="badge tn">${firstLabel}</span>`;
+      extras.forEach(lbl=>{
+        if(lbl==='لا يمكن')
+          html+=`<span class="badge tl">أو لا يمكن</span>`;
+        else
+          html+=`<span class="badge hc-alt">أو ${lbl}</span>`;
+      });
+      cell.innerHTML=html;
     }
   }
 }
@@ -2247,22 +2451,70 @@ function addPenalty(){
 
 function removePenalty(id){const idx=penalties.findIndex(p=>p.id===id);if(idx>-1)penalties.splice(idx,1);renderPenalties();updateFrom(0);}
 
+/* ── مساعد: يبني div-display + select مخفي بنفس نظام gsel ── */
+function makePenSel(placeholder, options, currentVal, onChange){
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:relative;width:100%;display:flex;align-items:stretch;';
+
+  // hidden select (مصدر البيانات فقط)
+  const sel = document.createElement('select');
+  sel.className = 'hp-sel';
+  sel.style.display = 'none';
+  sel.innerHTML = `<option value="">${placeholder}</option>` +
+    options.map(o=>`<option value="${o.value}">${o.label}</option>`).join('');
+  sel.addEventListener('change', ()=>onChange(sel.value));
+
+  // display div (مثل ht-sel-display تماماً)
+  const disp = document.createElement('div');
+  disp.className = 'ht-sel-display';
+  disp.style.fontSize = '10px';
+  disp.style.flex = '1';
+  disp.style.border = '1px solid rgba(212,168,67,0.35)';
+  disp.style.borderRadius = '8px';
+
+  disp.textContent = placeholder;
+  disp.addEventListener('click', ()=>gselOpen(disp, sel));
+
+  wrap.appendChild(sel);
+  wrap.appendChild(disp);
+
+  // ضبط القيمة بعد إضافة العناصر للـ DOM حتى يعمل selectedIndex بشكل صحيح
+  if(currentVal !== null && currentVal !== undefined && currentVal !== ''){
+    const matchOpt = Array.from(sel.options).find(o => o.value == currentVal);
+    if(matchOpt){
+      matchOpt.selected = true;
+      disp.textContent = matchOpt.textContent;
+    }
+  }
+
+  sel.addEventListener('change', ()=>{
+    const opt = sel.options[sel.selectedIndex];
+    disp.textContent = (opt && opt.value !== '') ? opt.textContent : placeholder;
+  });
+
+  return {wrap, sel, disp};
+}
+
 function renderPenalties(){
   const container=document.getElementById('hp_rows'); container.innerHTML='';
   penalties.forEach(pen=>{
     const row=document.createElement('div'); row.className='hp-row';
+
     const c1=document.createElement('div'); c1.className='hp-cell';
-    const sp=document.createElement('select'); sp.className='hp-sel';
-    sp.innerHTML='<option value="">اللاعب</option>'+[0,1,2,3].map(i=>`<option value="${i}"${pen.player===i?' selected':''}>${getPlayerName(i)}</option>`).join('');
-    sp.addEventListener('change',()=>{pen.player=sp.value===''?null:+sp.value;updateFrom(0);});
-    c1.appendChild(sp); row.appendChild(c1);
+    const playerOpts=[0,1,2,3].map(i=>({value:i, label:getPlayerName(i)}));
+    const p1=makePenSel('اللاعب', playerOpts, pen.player, v=>{
+      pen.player=v===''?null:+v; updateFrom(0);
+    });
+    c1.appendChild(p1.wrap); row.appendChild(c1);
+
     const c2=document.createElement('div'); c2.className='hp-cell';
-    const sv=document.createElement('select'); sv.className='hp-sel';
-    sv.innerHTML='<option value="">القيمة</option>'+PENALTY_VALUES.map(v=>`<option value="${v}"${pen.value===v?' selected':''}>${toAr(v)}</option>`).join('');
-    sv.addEventListener('change',()=>{pen.value=sv.value===''?null:+sv.value;updateFrom(0);});
-    c2.appendChild(sv); row.appendChild(c2);
+    const valueOpts=PENALTY_VALUES.map(v=>({value:v, label:toAr(v)}));
+    const p2=makePenSel('القيمة', valueOpts, pen.value, v=>{
+      pen.value=v===''?null:+v; updateFrom(0);
+    });
+    c2.appendChild(p2.wrap); row.appendChild(c2);
+
     const c3=document.createElement('div'); c3.className='hp-cell';
-    const sr=document.createElement('select'); sr.className='hp-sel';
     // فقط الجولات المنتهية (التي لها فائز)
     const completedRounds = state.map((r,i)=>({r,i})).filter(x=>x.r.winner!==null);
     const lastCompleted = completedRounds.length>0 ? completedRounds[completedRounds.length-1].i : null;
@@ -2270,13 +2522,12 @@ function renderPenalties(){
     if(pen.autoRound !== false){
       pen.round = lastCompleted;
     }
-    if(completedRounds.length===0){
-      sr.innerHTML='<option value="">الجولة</option>';
-    } else {
-      sr.innerHTML='<option value="">الجولة</option>'+completedRounds.map(x=>`<option value="${x.i}"${pen.round===x.i?' selected':''}>جولة ${toAr(x.i+1)}</option>`).join('');
-    }
-    sr.addEventListener('change',()=>{pen.round=sr.value===''?null:+sr.value; pen.autoRound=false; updateFrom(0);});
-    c3.appendChild(sr); row.appendChild(c3);
+    const roundOpts=completedRounds.map(x=>({value:x.i, label:'جولة '+toAr(x.i+1)}));
+    const p3=makePenSel('الجولة', roundOpts, pen.round, v=>{
+      pen.round=v===''?null:+v; pen.autoRound=false; updateFrom(0);
+    });
+    c3.appendChild(p3.wrap); row.appendChild(c3);
+
     const c4=document.createElement('div'); c4.className='hp-cell';
     const btn=document.createElement('button'); btn.className='hp-del'; btn.textContent='×'; btn.onclick=()=>deletePenalty(pen.id);
     c4.appendChild(btn); row.appendChild(c4);
@@ -2964,18 +3215,8 @@ function toggleSessions(){
 }
 
 /* ══ PROS BOARD ══ */
-function renderProsBoard(){
-  try{
-  var sessions = getSessions();
-  var empty = '<div class="pros-empty">لا توجد جولات محفوظة بعد</div>';
-
-  if(!sessions.length){
-    ['pros_best_body','pros_record_best_body']
-      .forEach(function(id){ var el=document.getElementById(id); if(el) el.innerHTML=empty; });
-    return;
-  }
-
-  // تجميع إحصائيات كل لاعب
+/* ══ SHARED PLAYER STATS (used by Pros Board + Monthly Archive) ══ */
+function computeAllPlayerStats(sessions){
   var stats = {};
   sessions.forEach(function(s){
     var scores = s.finalScores||[0,0,0,0];
@@ -3031,8 +3272,40 @@ function renderProsBoard(){
       }
     });
   });
+  return Object.values(stats);
+}
 
-  var allPlayers = Object.values(stats);
+function computeBestPlayers(sessions){
+  return computeAllPlayerStats(sessions)
+    .filter(function(p){ return p.sessions > 0; })
+    .sort(function(a,b){
+      if(b.points !== a.points) return b.points - a.points;
+      // عند التعادل → أفضل رقم قياسي (أكثر سلبية)
+      var bsA = a.bestWinScore !== null ? a.bestWinScore : Infinity;
+      var bsB = b.bestWinScore !== null ? b.bestWinScore : Infinity;
+      return bsA - bsB;
+    }).slice(0,10);
+}
+
+function computeRecordBest(sessions){
+  return computeAllPlayerStats(sessions)
+    .filter(function(p){ return p.bestWinScore !== null; })
+    .sort(function(a,b){ return a.bestWinScore - b.bestWinScore; })
+    .slice(0,10);
+}
+
+function renderProsBoard(){
+  try{
+  var sessions = getSessions();
+  var empty = '<div class="pros-empty">لا توجد جولات محفوظة بعد</div>';
+
+  if(!sessions.length){
+    ['pros_best_body','pros_record_best_body']
+      .forEach(function(id){ var el=document.getElementById(id); if(el) el.innerHTML=empty; });
+    return;
+  }
+
+  var allPlayers = computeAllPlayerStats(sessions);
   var MEDALS_BEST  = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
   var MEDALS_WORST = ['💀','😢','😞','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
 
@@ -3067,14 +3340,7 @@ function renderProsBoard(){
   }
 
   // ── جدول ١: أفضل اللاعبين ── حسب مجموع النقاط المكتسبة
-  var bestPlayers = allPlayers.filter(function(p){ return p.sessions > 0; })
-    .sort(function(a,b){
-      if(b.points !== a.points) return b.points - a.points;
-      // عند التعادل → أفضل رقم قياسي (أكثر سلبية)
-      var bsA = a.bestWinScore !== null ? a.bestWinScore : Infinity;
-      var bsB = b.bestWinScore !== null ? b.bestWinScore : Infinity;
-      return bsA - bsB;
-    }).slice(0,10);
+  var bestPlayers = computeBestPlayers(sessions);
 
   var bestEl = document.getElementById('pros_best_body');
   bestEl.innerHTML = bestPlayers.length
@@ -3084,9 +3350,7 @@ function renderProsBoard(){
     : '<div class="pros-empty">لا توجد نتائج بعد</div>';
 
   // ── جدول ٣: أفضل رقم قياسي للفوز ── Top 3 مع أيقونات
-  var recordBest = allPlayers.filter(function(p){ return p.bestWinScore !== null; })
-    .sort(function(a,b){ return a.bestWinScore - b.bestWinScore; })
-    .slice(0,10);
+  var recordBest = computeRecordBest(sessions);
 
   var rbEl = document.getElementById('pros_record_best_body');
   rbEl.innerHTML = recordBest.length
@@ -3097,6 +3361,110 @@ function renderProsBoard(){
     : '<div class="pros-empty">لا توجد نتائج بعد</div>';
 
   }catch(e){ console.error('ProsBoard error:',e); }
+}
+
+/* ══ MONTHLY ARCHIVE ══ */
+const ARCHIVE_KEY = 'hc_monthly_archive';
+const MONTH_TRACK_KEY = 'hc_archive_month';
+const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+function getMonthKey(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function monthLabel(monthKey){
+  var parts=(monthKey||'').split('-');
+  var y=parts[0], m=+parts[1];
+  return (MONTHS_AR[m-1]||'')+' '+toAr(y);
+}
+function getMonthlyArchive(){
+  try{return JSON.parse(localStorage.getItem(ARCHIVE_KEY)||'[]');}catch(e){return[];}
+}
+function saveMonthlyArchive(arr){
+  try{localStorage.setItem(ARCHIVE_KEY,JSON.stringify(arr));}catch(e){}
+}
+
+// يُستدعى يدوياً من زر "حفظ نتائج الشهر" في لوحة الأرشيف
+function openManualArchiveConfirm(){
+  var sessions=getSessions();
+  if(!sessions.length){
+    showToast('⚠️ لا توجد جولات محفوظة حالياً لحفظها');
+    return;
+  }
+  var curKey=getMonthKey(new Date());
+  var lbl=document.getElementById('month_archive_prev_label');
+  if(lbl) lbl.textContent=monthLabel(curKey);
+  var ov=document.getElementById('month_archive_overlay');
+  if(ov) ov.classList.add('show');
+}
+
+function closeMonthArchiveModal(){
+  var ov=document.getElementById('month_archive_overlay');
+  if(ov) ov.classList.remove('show');
+}
+
+function doArchiveMonth(){
+  var sessions=getSessions();
+  if(!sessions.length){
+    showToast('⚠️ لا توجد جولات محفوظة حالياً لحفظها');
+    closeMonthArchiveModal();
+    return;
+  }
+  var curKey=getMonthKey(new Date());
+  var best=computeBestPlayers(sessions);
+  var record=computeRecordBest(sessions);
+  var archive=getMonthlyArchive();
+  archive.unshift({
+    monthKey: curKey,
+    label: monthLabel(curKey),
+    savedAt: Date.now(),
+    sessionsCount: sessions.length,
+    bestPlayers: best.map(function(p){return {name:p.name,points:p.points,wins:p.wins,sessions:p.sessions};}),
+    recordBest: record.map(function(p){return {name:p.name,bestWinScore:p.bestWinScore};})
+  });
+  saveMonthlyArchive(archive);
+  localStorage.removeItem(DB_KEY); // مسح كل الجولات المحفوظة
+  closeMonthArchiveModal();
+  renderSessionList(); renderTop3(); renderProsBoard(); renderArchivePanel();
+  showToast('📦 تم حفظ نتائج '+monthLabel(curKey)+' ومسح البيانات');
+}
+
+function renderArchivePanel(){
+  var archive=getMonthlyArchive();
+  var el=document.getElementById('archive_body');
+  if(!el) return;
+  if(!archive.length){ el.innerHTML='<div class="pros-empty">لا يوجد أرشيف بعد</div>'; return; }
+  var MEDALS=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+  el.innerHTML=archive.map(function(m){
+    var bestRows=(m.bestPlayers||[]).map(function(p,i){
+      return '<div class="pros-table-row">'
+        +'<div class="pros-medal">'+(MEDALS[i]||'')+'</div>'
+        +'<div style="flex:1;">'
+        +'<div class="pros-name">'+p.name+'</div>'
+        +'<div class="pros-sub">'+toAr(p.wins)+' فوز من '+toAr(p.sessions)+' جولة</div>'
+        +'</div>'
+        +'<div class="pros-val"><span style="color:#4ade80;">'+toAr(p.points)+' نقطة</span></div>'
+        +'</div>';
+    }).join('');
+    var recordRows=(m.recordBest||[]).map(function(p,i){
+      return '<div class="pros-table-row">'
+        +'<div class="pros-medal">'+(MEDALS[i]||'')+'</div>'
+        +'<div style="flex:1;">'
+        +'<div class="pros-name">'+p.name+'</div>'
+        +'<div class="pros-sub">أفضل نتيجة فوز قياسية</div>'
+        +'</div>'
+        +'<div class="pros-val"><span style="color:#4ade80;">'+toAr(p.bestWinScore)+' نقطة</span></div>'
+        +'</div>';
+    }).join('');
+    return '<div style="margin-bottom:22px;">'
+      +'<div class="divider" style="margin-bottom:10px;"><div class="divider-line"></div><div class="divider-label">📅 '+m.label+'</div><div class="divider-line"></div></div>'
+      +'<div class="pros-table record-best" style="margin-bottom:10px;">'
+      +'<div class="pros-table-head"><div class="pros-table-icon">⚡</div><div class="pros-table-title">أفضل رقم قياسي للفوز</div></div>'
+      + (recordRows||'<div class="pros-empty">لا توجد نتائج</div>')
+      +'</div>'
+      +'<div class="pros-table best-players">'
+      +'<div class="pros-table-head"><div class="pros-table-icon">🥇</div><div class="pros-table-title">أفضل اللاعبين</div></div>'
+      + (bestRows||'<div class="pros-empty">لا توجد نتائج</div>')
+      +'</div>'
+      +'</div>';
+  }).join('');
 }
 
 function toggleTop3(){
@@ -3207,10 +3575,13 @@ function openPanel(name){
   if(name==='info') loadInfoHindTable();
   // إذا pros: حمّل لوحة المحترفين
   if(name==='pros') renderProsBoard();
+  // إذا archive: حمّل الأرشيف الشهري
+  if(name==='archive') renderArchivePanel();
   document.getElementById('panel_overlay').classList.add('show');
   document.getElementById('settings_panel').classList.remove('open');
   document.getElementById('info_panel').classList.remove('open');
   document.getElementById('pros_panel').classList.remove('open');
+  document.getElementById('archive_panel').classList.remove('open');
   setTimeout(()=>document.getElementById(name+'_panel').classList.add('open'),10);
   document.body.style.overflow='hidden';
 }
@@ -3218,6 +3589,7 @@ function closePanel(){
   document.getElementById('settings_panel').classList.remove('open');
   document.getElementById('info_panel').classList.remove('open');
   document.getElementById('pros_panel').classList.remove('open');
+  document.getElementById('archive_panel').classList.remove('open');
   setTimeout(()=>{
     document.getElementById('panel_overlay').classList.remove('show');
     document.body.style.overflow='';
@@ -4044,6 +4416,7 @@ function toggleInfoSec(toggleEl){
 /* ══ INIT ══ */
 loadAppSettings();
 buildTable(); updateHandSel(0); renderPenalties(); renderRanks(); renderHandCards(); renderSessionList(); renderTop3(); applySessionTitle(); lockCompletedRows();
+/* الأرشفة الشهرية الآن يدوية بالكامل — زر "حفظ نتائج الشهر" داخل لوحة الأرشيف */
 // استرجاع الجولة المحفوظة تلقائياً
 (function restoreDraft(){
   try{
@@ -4133,29 +4506,48 @@ refreshDatalist();
 
 // ══ CUSTOM DROPDOWN AUTOCOMPLETE ══
 (function(){
+  var hideTimer=null;
+  function cancelHide(){ if(hideTimer){clearTimeout(hideTimer);hideTimer=null;} }
   function getMatches(val){
     var names=getSavedPlayerNames();
     if(!val) return names.slice(0,4);
-    return names.filter(function(n){return n.indexOf(val.trim())!==-1;}).slice(0,4);
+    return names.filter(function(n){return n.indexOf(val.trim())!==-1;}).slice(0,6);
   }
   function hideAll(){
     [0,1,2,3].forEach(function(j){
       var dd=document.getElementById('pname_dd_'+j);
-      if(dd) dd.style.display='none';
+      if(dd){ dd.classList.remove('open'); dd.innerHTML=''; }
+    });
+  }
+  // يحسب هل تُعرض القائمة فوق الحقل أو تحته حسب المساحة المتاحة فعلياً
+  // (يُعاد حسابه بعد استقرار لوحة مفاتيح iOS، وعند التمرير، وعند تغيّر ارتفاع الشاشة)
+  function positionDD(i){
+    var inp=document.getElementById('pname_'+i);
+    var dd=document.getElementById('pname_dd_'+i);
+    if(!inp||!dd) return;
+    requestAnimationFrame(function(){
+      var rect=inp.getBoundingClientRect();
+      var spaceBelow=window.innerHeight-rect.bottom;
+      if(spaceBelow<220 && rect.top>220){ dd.classList.add('ac-above'); }
+      else { dd.classList.remove('ac-above'); }
     });
   }
   function showDD(i,inp){
+    cancelHide();
     var dd=document.getElementById('pname_dd_'+i);
     if(!dd) return;
     var matches=getMatches(inp.value);
-    if(!matches.length){dd.style.display='none';return;}
+    if(!matches.length){ dd.classList.remove('open'); dd.innerHTML=''; return; }
     dd.innerHTML='';
     matches.forEach(function(name){
       var item=document.createElement('div');
-      item.className='pname-dd-item';
-      item.textContent=name;
+      item.className='ac-item';
+      var icon=document.createElement('span'); icon.className='ac-item-icon'; icon.textContent='👤';
+      var txt=document.createElement('span'); txt.className='ac-item-text'; txt.textContent=name;
+      item.appendChild(icon); item.appendChild(txt);
       function pick(e){
         e.preventDefault();
+        cancelHide();
         var dup=[0,1,2,3].some(function(j){
           if(j===i)return false;
           var o=document.getElementById('pname_'+j);
@@ -4170,22 +4562,23 @@ refreshDatalist();
       item.addEventListener('touchstart',pick,{passive:false});
       dd.appendChild(item);
     });
-    // حساب الموقع: فوق أو تحت حسب المساحة المتاحة
-    dd.style.top=''; dd.style.bottom='';
-    var inpRect=inp.getBoundingClientRect();
-    var ddH=matches.length*50;
-    if(inpRect.top > ddH+16){
-      dd.style.bottom='calc(100% + 4px)'; dd.style.top='';
-    } else {
-      dd.style.top='calc(100% + 4px)'; dd.style.bottom='';
-    }
-    dd.style.display='block';
+    positionDD(i);
+    dd.classList.add('open');
   }
   [0,1,2,3].forEach(function(i){
     var inp=document.getElementById('pname_'+i);
     if(!inp)return;
-    inp.addEventListener('focus',function(){showDD(i,inp);});
+    inp.addEventListener('focus',function(){
+      cancelHide();
+      showDD(i,inp);
+      // إعادة حساب الموضع بعد استقرار لوحة مفاتيح iOS فعلياً (rAF وحدها لا تكفي)
+      setTimeout(function(){
+        var dd=document.getElementById('pname_dd_'+i);
+        if(dd && dd.classList.contains('open')) positionDD(i);
+      },350);
+    });
     inp.addEventListener('input',function(){
+      cancelHide();
       showDD(i,inp);
       var firstStarted=state[0]&&(state[0].winner!==null&&state[0].winner!==undefined||state[0].hind!==null&&state[0].hind!==undefined);
       if(firstStarted){showToast('⚠️ لا يمكن تغيير الأسماء بعد بدء اللعبة');inp.value=inp.dataset.locked||inp.value;return;}
@@ -4202,7 +4595,8 @@ refreshDatalist();
       }
     });
     inp.addEventListener('blur',function(){
-      setTimeout(function(){hideAll();},150);
+      cancelHide();
+      hideTimer=setTimeout(function(){hideAll();hideTimer=null;},200);
       var fn=inp.value.trim();
       if(!fn)return;
       var dup=[0,1,2,3].some(function(j){if(j===i)return false;var o=document.getElementById('pname_'+j);return o&&o.value.trim()===fn;});
@@ -4216,8 +4610,23 @@ refreshDatalist();
       var inp=document.getElementById('pname_'+j);
       return (dd&&dd.contains(e.target))||(inp&&inp===e.target);
     });
-    if(!inAny)hideAll();
+    if(!inAny){cancelHide();hideAll();}
   });
+  // إغلاق القائمة عند التمرير، وإعادة ضبط موضعها عند تغيّر ارتفاع الشاشة (ظهور/اختفاء لوحة مفاتيح iOS)
+  window.addEventListener('scroll',function(){
+    [0,1,2,3].forEach(function(i){
+      var dd=document.getElementById('pname_dd_'+i);
+      if(dd && dd.classList.contains('open')) positionDD(i);
+    });
+  },true);
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize',function(){
+      [0,1,2,3].forEach(function(i){
+        var dd=document.getElementById('pname_dd_'+i);
+        if(dd && dd.classList.contains('open')) positionDD(i);
+      });
+    });
+  }
 })();
 </script>
 </body>
