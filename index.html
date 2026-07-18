@@ -2,11 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>HandCards V1.1.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HandCards V1.1.5</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="HandCards V1.1.4">
+<meta name="apple-mobile-web-app-title" content="HandCards V1.1.5">
 <meta name="theme-color" content="#0F0F0F">
 <link rel="manifest" id="manifest-link">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Bebas+Neue&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
@@ -1259,7 +1259,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="cr-center" style="flex-direction:column;gap:0;line-height:1.4;text-align:center;flex:1;">
     <span style="font-family:'Cairo',sans-serif;font-size:11px;font-weight:900;color:var(--gold);">قيد لعبة الهاند</span>
     <span style="font-family:'Tajawal',sans-serif;font-size:10px;color:#fff;font-weight:500;">تصميم سلطان بن طوق المري</span>
-    <span class="cr-version" style="font-size:10px;">V1.1.4</span>
+    <span class="cr-version" style="font-size:10px;">V1.1.5</span>
   </div>
 </div>
 
@@ -2101,13 +2101,24 @@ function getRowGreenRed(r){
   if(cntLast === 1){
     for(var j=0;j<4;j++){ if(vals[j]===mx){ redIdx=j; break; } }
   } else {
-    // تعادل — ابحث في الجولة السابقة
-    var inherited = -1;
+    // تعادل — ابحث في آخر لاعب كان عليه الأحمر
+    var prevRed = -1;
     for(var pr=r-1; pr>=0; pr--){
-      if(_cumCache[pr]){ var g=getRowGreenRed(pr); inherited=g.red; break; }
+      if(_cumCache[pr]){ var g=getRowGreenRed(pr); prevRed=g.red; break; }
     }
-    if(inherited>=0 && vals[inherited]===mx) redIdx=inherited;
-    else { for(var j=0;j<4;j++){ if(vals[j]===mx){ redIdx=j; break; } } }
+    if(prevRed>=0 && vals[prevRed]===mx){
+      // التعادل مستمر لنفس اللاعب — يبقى ثابت عليه، لا ينتقل كل جولة
+      redIdx=prevRed;
+    } else if(prevRed>=0){
+      // تعادل جديد — ينتقل للاعب التالي في الترتيب بعد آخر لاعب كان عليه الأحمر
+      for(var k=1;k<=4;k++){
+        var idx=(prevRed+k)%4;
+        if(vals[idx]===mx){ redIdx=idx; break; }
+      }
+    }
+    if(redIdx===-1){
+      for(var j=0;j<4;j++){ if(vals[j]===mx){ redIdx=j; break; } }
+    }
   }
 
   return { green: greenIdx, red: redIdx };
@@ -2413,9 +2424,11 @@ function renderHandCards(){
       if(gainF<gainN){ firstLabel=HT_HIND[bF].name+' من اليد'; firstIdx=bF; }
       else { firstLabel=HT_HIND[bN].name; firstIdx=bN; }
 
-      // إذا الخيار الأول عادي وكان "من اليد" لنفسه يكفي → عادي + من اليد فقط
+      // إذا الخيار الأول عادي (وما يحتاج جوكر) وكان "من اليد" لنفسه يكفي → عادي + من اليد فقط
+      // (نستثني الهاندات التي تحتاج جوكر حتى نلتزم بجدول HC_OPTIONS دائماً لها)
       const isFirstNormal=!firstLabel.endsWith(' من اليد');
-      if(isFirstNormal&&p===nextHandPlayer&&HT_HIND[firstIdx].hand>0&&
+      const requiresJoker=firstLabel.indexOf('جوكر')!==-1;
+      if(isFirstNormal&&!requiresJoker&&p===nextHandPlayer&&HT_HIND[firstIdx].hand>0&&
          HT_HIND[firstIdx].down+HT_HIND[firstIdx].hand>diff){
         cell.innerHTML=scoreStr+
           `<span class="badge tn">${firstLabel}</span>`+
