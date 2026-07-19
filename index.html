@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HandCards V1.1.5</title>
+<title>HandCards V1.1.6</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="HandCards V1.1.5">
+<meta name="apple-mobile-web-app-title" content="HandCards V1.1.6">
 <meta name="theme-color" content="#0F0F0F">
 <link rel="manifest" id="manifest-link">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Bebas+Neue&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
@@ -50,8 +50,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .divider-label{font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;letter-spacing:0;color:var(--gold);white-space:nowrap;}
 
 /* HAND TABLE */
-.ht-wrap{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px;}
-.ht-head{display:grid;grid-template-columns:20px 1.7fr 2fr 1.4fr 1fr 1fr 1fr 1fr;background:var(--red);border-bottom:2px solid var(--red2);}
+.ht-wrap{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:visible;margin-bottom:18px;}
+.ht-head{display:grid;grid-template-columns:20px 1.7fr 2fr 1.4fr 1fr 1fr 1fr 1fr;background:var(--red);border-bottom:2px solid var(--red2);border-radius:18px 18px 0 0;overflow:hidden;}
 .ht-th{padding:10px 3px;font-size:9px;font-weight:900;font-family:'Cairo',sans-serif;color:#fff;text-align:center;line-height:1.3;border-left:1px solid rgba(0,0,0,.25);}
 .ht-th:last-child{border-left:none}
 .ht-row{display:grid;grid-template-columns:20px 1.7fr 2fr 1.4fr 1fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);min-height:50px;}
@@ -60,7 +60,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ht-row:nth-child(even){background:var(--card2);}
 .ht-row.filled{background:rgba(212,168,67,.04);}
 .ht-rn{display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);font-weight:700;border-left:1px solid var(--border);padding:4px 2px;}
-.ht-cell-sel{display:flex;align-items:center;padding:3px;border-left:1px solid var(--border);}
+.ht-cell-sel{display:flex;align-items:center;padding:3px;border-left:1px solid var(--border);position:relative;}
 .ht-sel{width:100%;background:var(--inp);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 2px;font-family:'Tajawal',sans-serif;font-weight:700;text-align:center;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;}
 .ht-sel:focus{border-color:var(--gold);}
 .ht-sel option{background:var(--card2);}
@@ -69,7 +69,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ht-sel-display{width:100%;background:var(--inp);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 8px 5px 2px;font-family:'Tajawal',sans-serif;font-weight:700;line-height:1.2;text-align:right;direction:rtl;cursor:pointer;white-space:normal;overflow:hidden;word-break:break-word;-webkit-user-select:none;user-select:none;box-sizing:border-box;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 .ht-sel-display:active{border-color:var(--gold);}
 .ht-sel-display.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
-.gsel-dropdown{position:fixed;background:#1c1c1c;border:1px solid var(--gold);border-radius:10px;z-index:99999;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.8);display:none;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+.gsel-dropdown{position:absolute;background:#1c1c1c;border:1px solid var(--gold);border-radius:10px;z-index:5000;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.8);display:none;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 .gsel-dropdown.open{display:block;}
 .gsel-item{padding:10px 14px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:flex-start;gap:6px;direction:rtl;text-align:right;white-space:nowrap;}
 .gsel-item:last-child{border-bottom:none;}
@@ -180,8 +180,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .reset-cancel-btn:active{transform:scale(.95);}
 
 /* HAND PENALTY */
-.hp-wrap{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px;}
-.hp-head{display:grid;grid-template-columns:1.4fr 1.2fr 1fr 40px;background:var(--red);border-bottom:2px solid var(--red2);}
+.hp-wrap{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:visible;margin-bottom:18px;}
+.hp-head{display:grid;grid-template-columns:1.4fr 1.2fr 1fr 40px;background:var(--red);border-bottom:2px solid var(--red2);border-radius:18px 18px 0 0;overflow:hidden;}
 .hp-th{padding:11px 6px;font-size:10px;font-weight:900;font-family:'Cairo',sans-serif;color:#fff;text-align:center;border-left:1px solid rgba(0,0,0,.25);}
 .hp-th:last-child{border-left:none}
 .hp-row{display:grid;grid-template-columns:1.4fr 1.2fr 1fr 40px;border-bottom:1px solid var(--border);min-height:48px;}
@@ -1259,7 +1259,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="cr-center" style="flex-direction:column;gap:0;line-height:1.4;text-align:center;flex:1;">
     <span style="font-family:'Cairo',sans-serif;font-size:11px;font-weight:900;color:var(--gold);">قيد لعبة الهاند</span>
     <span style="font-family:'Tajawal',sans-serif;font-size:10px;color:#fff;font-weight:500;">تصميم سلطان بن طوق المري</span>
-    <span class="cr-version" style="font-size:10px;">V1.1.5</span>
+    <span class="cr-version" style="font-size:10px;">V1.1.6</span>
   </div>
 </div>
 
@@ -1919,13 +1919,13 @@ function makeSelReactive(selectEl, dispEl){
 let _gselCurrentSelect=null;
 function gselClose(){
   const dd=document.getElementById('gsel_dropdown');
-  if(dd){ dd.classList.remove('open'); dd.innerHTML=''; }
+  if(dd){ dd.style.display='none'; dd.innerHTML=''; }
   _gselCurrentSelect=null;
   document.removeEventListener('click', gselOutsideClick, true);
 }
 function gselOutsideClick(e){
   const dd=document.getElementById('gsel_dropdown');
-  if(dd && dd.classList.contains('open') && !dd.contains(e.target) && !e.target.closest('.ht-sel-display')) gselClose();
+  if(dd && dd.style.display==='block' && !dd.contains(e.target) && !e.target.closest('.ht-sel-display')) gselClose();
 }
 function gselOpen(dispEl, selectEl){
   if(selectEl.disabled) return;
@@ -1935,8 +1935,13 @@ function gselOpen(dispEl, selectEl){
   if(!dd){
     dd=document.createElement('div');
     dd.id='gsel_dropdown'; dd.className='gsel-dropdown';
-    document.body.appendChild(dd);
   }
+  // نضع القائمة داخل نفس خانة الحقل (لا document.body) حتى تتحرك وتتحجّم
+  // تلقائياً مع الصفحة عند التمرير أو التكبير/التصغير اليدوي، بدل ما تنفصل عن مكانها
+  const parent = dispEl.parentElement;
+  if(getComputedStyle(parent).position === 'static') parent.style.position='relative';
+  parent.appendChild(dd);
+
   const opts=Array.from(selectEl.options);
   dd.innerHTML = opts.map(o=>{
     const isSel = (o.value===selectEl.value);
@@ -1953,29 +1958,36 @@ function gselOpen(dispEl, selectEl){
       gselClose();
     });
   });
-  const r = dispEl.getBoundingClientRect();
-  dd.style.minWidth = Math.max(r.width, 120)+'px';
+
+  dd.style.minWidth = Math.max(dispEl.offsetWidth, 150)+'px';
+  dd.style.top=''; dd.style.bottom=''; dd.style.left=''; dd.style.right='0';
   // نُظهر مخفياً أولاً لقياس الحجم الحقيقي
-  dd.style.visibility = 'hidden';
-  dd.classList.add('open');
-  // نقيس بعد ما يُرسم
+  dd.style.visibility='hidden';
+  dd.style.display='block';
+
   requestAnimationFrame(()=>{
+    const r = dispEl.getBoundingClientRect();
+    const vh = window.innerHeight, vw = window.innerWidth;
     const ddh = dd.offsetHeight;
-    const ddw = dd.offsetWidth;
-    const vh = window.innerHeight;
-    const vw = window.innerWidth;
-    // أفضل position: أسفل الزر إذا في مساحة، وإلا فوقه
-    let top = r.bottom + 4;
-    if(top + ddh > vh - 70) top = r.top - ddh - 4; // 70 = nav bar height
-    if(top < 8) top = 8;
-    // أفضل position أفقياً: من يمين الزر للـ RTL، مع عدم الخروج من الشاشة
-    let left = r.right - ddw;
-    if(left < 8) left = 8;
-    if(left + ddw > vw - 8) left = vw - ddw - 8;
-    dd.style.left = left+'px';
-    dd.style.top = top+'px';
-    dd.style.visibility = '';
+
+    // رأسياً: تحت الحقل إذا في مساحة كافية، وإلا فوقه
+    if(vh - r.bottom < ddh+16 && r.top > ddh+16){
+      dd.style.bottom = (dispEl.offsetHeight+4)+'px'; dd.style.top='';
+    } else {
+      dd.style.top = (dispEl.offsetHeight+4)+'px'; dd.style.bottom='';
+    }
+
+    // أفقياً: تأكد ما تخرج القائمة من حدود الشاشة يمين/يسار
+    const ddRect = dd.getBoundingClientRect();
+    if(ddRect.left < 8){
+      dd.style.right = (parseFloat(dd.style.right)||0) - (8 - ddRect.left) + 'px';
+    } else if(ddRect.right > vw - 8){
+      dd.style.right = (parseFloat(dd.style.right)||0) + (ddRect.right - (vw - 8)) + 'px';
+    }
+
+    dd.style.visibility='';
   });
+
   _gselCurrentSelect = selectEl;
   setTimeout(()=>document.addEventListener('click', gselOutsideClick, true), 0);
 }
